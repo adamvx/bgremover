@@ -1,49 +1,43 @@
 import styled from "@emotion/styled";
 import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
-import { Button, Paper } from "@mui/material";
+import { Button, Paper, Switch } from "@mui/material";
 import type { NextPage } from "next";
-import { useEffect, useLayoutEffect, useRef } from "react";
-import Webcam from "react-webcam";
-import { useWindowSize } from "usehooks-ts";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const Container = styled.div`
 	width: 100vw;
+	max-width: 100%;
 	height: 100vh;
 	padding: 16px;
 	display: flex;
 	flex-direction: row;
 	gap: 16px;
+	position: relative;
 `;
 
 const VideoContainer = styled.div`
-	position: relative;
 	flex: 1;
 	display: flex;
 	align-self: center;
-	max-height: 100%;
 `;
 
-const Canvas = styled.canvas`
+const Video = styled.video`
+	width: 100%;
 	border-radius: 4px;
-	transform: rotateY(180deg);
+`;
+
+const HiddenLayer = styled.div`
+	display: none;
 `;
 
 const Home: NextPage = () => {
 	const webcamRef = useRef<HTMLVideoElement>(null);
+	const contentRef = useRef<HTMLVideoElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
-	const conteninerRef = useRef<HTMLDivElement>(null);
-
-	const size = useWindowSize();
+	const [debug, setDebug] = useState(false);
 
 	useEffect(() => {
-		if (canvasRef.current && conteninerRef.current) {
-			canvasRef.current.width = conteninerRef.current.clientWidth;
-			canvasRef.current.height = (conteninerRef.current.clientWidth / 16) * 9;
-		}
-	}, [size, canvasRef, conteninerRef]);
-
-	useLayoutEffect(() => {
 		const selfieSegmentation = new SelfieSegmentation({
 			locateFile: (file) => {
 				console.log(file);
@@ -98,24 +92,32 @@ const Home: NextPage = () => {
 		};
 	}, []);
 
+	useLayoutEffect(() => {
+		contentRef.current!.srcObject = canvasRef.current!.captureStream(30);
+	}, [canvasRef, contentRef]);
+
 	return (
-		<Container>
-			<VideoContainer ref={conteninerRef}>
+		<>
+			<Container>
+				<VideoContainer>
+					<Video autoPlay ref={contentRef} />
+				</VideoContainer>
+				<Paper elevation={1} style={{ width: 384 }}>
+					<Switch value={debug} onChange={(_, c) => setDebug(c)} />
+					{debug ? "DEBUG ON - scroll down" : "DEBUG OFF"}
+				</Paper>
+			</Container>
+			<HiddenLayer style={{ display: debug ? "block" : "none" }}>
 				<video
 					ref={webcamRef}
 					style={{
-						display: "none",
-						position: "absolute",
-						width: "100%",
-						height: "100%",
+						width: 1280,
+						height: 720,
 					}}
 				/>
-				<Canvas ref={canvasRef} />
-			</VideoContainer>
-			<Paper elevation={1} style={{ width: 384 }}>
-				<Button>Hello</Button>
-			</Paper>
-		</Container>
+				<canvas ref={canvasRef} width={1280} height={720} />
+			</HiddenLayer>
+		</>
 	);
 };
 
