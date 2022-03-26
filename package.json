@@ -15,13 +15,9 @@
     "@mediapipe/selfie_segmentation": "^0.1.1632777926",
     "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.5.2",
-    "@mui/styled-engine-sc": "^5.5.2",
-    "@techstark/opencv-js": "^4.5.4-release.1",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-webcam": "^7.0.0",
-    "styled-components": "^5.3.5",
     "usehooks-ts": "^2.4.2"
   },
   "devDependencies": {
