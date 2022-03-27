@@ -13,6 +13,8 @@ export class Camera {
 				audio: false,
 				video: {
 					aspectRatio: this.props.width / this.props.height,
+					width: this.props.width,
+					height: this.props.height,
 					facingMode: "user",
 				},
 			})

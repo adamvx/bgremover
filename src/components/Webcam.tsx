@@ -19,6 +19,7 @@ const HiddenLayer = styled.div`
 const Video = styled.video`
 	width: 100%;
 	border-radius: 4px;
+	background-color: #222222;
 `;
 
 export class Webcam extends Component<Props> {
@@ -35,8 +36,9 @@ export class Webcam extends Component<Props> {
 	}
 
 	componentDidMount() {
-		this.contentRef.current!.srcObject =
-			this.canvasRef.current!.captureStream(30);
+		const canvasElement = this.canvasRef.current!;
+		const context = canvasElement.getContext("2d")!;
+		this.contentRef.current!.srcObject = canvasElement.captureStream(30);
 
 		this.selfieSegmentation = new SelfieSegmentation({
 			locateFile: (file) => {
@@ -48,8 +50,6 @@ export class Webcam extends Component<Props> {
 			selfieMode: true,
 		});
 		this.selfieSegmentation.onResults((res) => {
-			const canvasElement = this.canvasRef.current!;
-			const context = canvasElement.getContext("2d")!;
 			context.save();
 			context.clearRect(0, 0, canvasElement.width, canvasElement.height);
 			context.drawImage(
