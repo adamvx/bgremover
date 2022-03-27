@@ -1,18 +1,19 @@
-import React from "react";
 import styled from "@emotion/styled";
-import { Button, Paper } from "@mui/material";
+import { BlockOutlined, DeblurOutlined } from "@mui/icons-material";
+import BlurOnIcon from "@mui/icons-material/BlurOn";
+import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
+import { Paper } from "@mui/material";
 import type { NextPage } from "next";
-import { useState } from "react";
+import React, { useState } from "react";
+import { FilterItem } from "../components/FilterItem";
+import { FiltersGroup } from "../components/FiltersGroup";
 import { Webcam } from "../components/Webcam";
 import {
 	BlurFilter,
 	ColorFilter,
-	IFilter,
 	CustomBackgroundImageFilter,
+	IFilter,
 } from "../helpers/filters";
-import BlurOnIcon from "@mui/icons-material/BlurOn";
-import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
-import { DeleteOutlined } from "@mui/icons-material";
 
 const Container = styled.div`
 	min-width: 100vw;
@@ -29,13 +30,6 @@ const VideoContainer = styled.div`
 	align-self: center;
 `;
 
-const StyledButton = styled(Button)`
-	padding: 0px 30px;
-	height: 70px;
-	width: 70px;
-	margin: 2px;
-`;
-
 const Home: NextPage = () => {
 	const [filter, setFilter] = useState<IFilter>();
 	const [image, setImage] = useState<File | null>(null);
@@ -49,81 +43,71 @@ const Home: NextPage = () => {
 			<VideoContainer>
 				<Webcam filter={filter} />
 			</VideoContainer>
-			<Paper elevation={1} style={{ width: 384 }}>
-				<StyledButton
-					style={{ backgroundColor: "#ff0000" }}
-					onClick={() => setFilter(new ColorFilter("#ff0000"))}
-				></StyledButton>
-				<StyledButton
-					style={{ backgroundColor: "#00ff00" }}
-					onClick={() => setFilter(new ColorFilter("#00ff00"))}
-				></StyledButton>
-				<StyledButton
-					style={{ backgroundColor: "#0000ff" }}
-					onClick={() => setFilter(new ColorFilter("#0000ff"))}
-				></StyledButton>
-				<StyledButton
-					style={{ backgroundColor: "#fff000" }}
-					onClick={() => setFilter(new ColorFilter("#fff000"))}
-				></StyledButton>
-				<StyledButton
-					style={{
-						backgroundColor: "#dfdfdf",
-						flexDirection: "column",
-						fontSize: "7px",
-						color: "#9c9c9c",
-					}}
-					onClick={() => setFilter(new BlurFilter(6))}
-				>
-					<BlurOnIcon fontSize="large" /> light blur
-				</StyledButton>
-				<StyledButton
-					style={{
-						backgroundColor: "#dfdfdf",
-						flexDirection: "column",
-						fontSize: "7px",
-						color: "#9c9c9c",
-					}}
-					onClick={() => setFilter(new BlurFilter(12))}
-				>
-					<BlurOnIcon fontSize="large" /> strong blur
-				</StyledButton>
-				<input
-					type="file"
-					accept="image/*"
-					onChange={({ target: { files } }) => handleFileUpload(files)}
-					style={{ display: "none" }}
-				/>
-				<StyledButton
-					style={{ backgroundColor: "#dfdfdf", color: "#9c9c9c" }}
-					onClick={() =>
-						image && setFilter(new CustomBackgroundImageFilter(image))
-					}
-				>
-					<FileUploadRoundedIcon fontSize="large" />
-				</StyledButton>
-				<StyledButton
-					style={{ backgroundColor: "#dfdfdf", color: "#9c9c9c" }}
-					onClick={() => setFilter(undefined)}
-				>
-					<DeleteOutlined />
-				</StyledButton>
-
-				{/* <Button onClick={() => setFilter(new ColorFilter("#ff0000"))}>
-          Red
-        </Button>
-        <Button onClick={() => setFilter(new ColorFilter("#00ff00"))}>
-          Green
-        </Button>
-        <Button onClick={() => setFilter(new ColorFilter("#0000ff"))}>
-          Blue
-        </Button>
-        <Button onClick={() => setFilter(new ColorFilter("#fff000"))}>
-          Yellow
-        </Button>
-        <Button onClick={() => setFilter(new BlurFilter(6))}>Blur</Button>
-        <Button onClick={() => setFilter(new BlurFilter(12))}>Big Blur</Button>
-        <Button onClick={() => setFilter(undefined)}>Clear</Button> */}
+			<Paper elevation={1} style={{ width: 336 }}>
+				<FiltersGroup title="Filtre">
+					<FilterItem
+						tooltip="Odstrániť filtre"
+						icon={<BlockOutlined fontSize="large" />}
+						onClick={() => setFilter(undefined)}
+					/>
+					<FilterItem
+						tooltip="Ľahké rozmazanie"
+						icon={<DeblurOutlined fontSize="large" />}
+						onClick={() => setFilter(new BlurFilter(6))}
+					/>
+					<FilterItem
+						tooltip="Silné rozmazanie"
+						icon={<BlurOnIcon fontSize="large" />}
+						onClick={() => setFilter(new BlurFilter(12))}
+					/>
+				</FiltersGroup>
+				<FiltersGroup title="Farby">
+					<FilterItem
+						tooltip="Červené pozadie"
+						backgroundColor="#ff0000"
+						onClick={() => setFilter(new ColorFilter("#ff0000"))}
+					/>
+					<FilterItem
+						tooltip="Zelené pozadie"
+						backgroundColor="#00ff00"
+						onClick={() => setFilter(new ColorFilter("#00ff00"))}
+					/>
+					<FilterItem
+						tooltip="Modré pozadie"
+						backgroundColor="#0000ff"
+						onClick={() => setFilter(new ColorFilter("#0000ff"))}
+					/>
+					<FilterItem
+						tooltip="Žlté pozadie"
+						backgroundColor="#fff000"
+						onClick={() => setFilter(new ColorFilter("#fff000"))}
+					/>
+					<FilterItem
+						tooltip="Biele pozadie"
+						backgroundColor="#ffffff"
+						onClick={() => setFilter(new ColorFilter("#ffffff"))}
+					/>
+					<FilterItem
+						tooltip="Čierne pozadie"
+						backgroundColor="#000000"
+						onClick={() => setFilter(new ColorFilter("#000000"))}
+					/>
+				</FiltersGroup>
+				<FiltersGroup title="Vlastné pozadie">
+					<input
+						type="file"
+						accept="image/*"
+						onChange={({ target: { files } }) => handleFileUpload(files)}
+						style={{ display: "none" }}
+					/>
+					<FilterItem
+						tooltip="Nahrajte si vlasné pozadie"
+						icon={<FileUploadRoundedIcon fontSize="large" />}
+						onClick={() =>
+							image && setFilter(new CustomBackgroundImageFilter(image))
+						}
+					/>
+				</FiltersGroup>
 			</Paper>
 		</Container>
 	);
