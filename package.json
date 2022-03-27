@@ -11,6 +11,8 @@
   "dependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
     "@mediapipe/camera_utils": "^0.3.1640029074",
     "@mediapipe/selfie_segmentation": "^0.1.1632777926",
     "@mui/icons-material": "^5.5.1",
