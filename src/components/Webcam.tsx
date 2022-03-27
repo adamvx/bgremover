@@ -27,6 +27,7 @@ export class Webcam extends Component<Props> {
 	private canvasRef = React.createRef<HTMLCanvasElement>();
 	private finalResolution: TResolution;
 	private camera?: Camera;
+	private selfieSegmentation?: SelfieSegmentation;
 
 	constructor(props: Props) {
 		super(props);
@@ -37,16 +38,16 @@ export class Webcam extends Component<Props> {
 		this.contentRef.current!.srcObject =
 			this.canvasRef.current!.captureStream(30);
 
-		const selfieSegmentation = new SelfieSegmentation({
+		this.selfieSegmentation = new SelfieSegmentation({
 			locateFile: (file) => {
 				return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
 			},
 		});
-		selfieSegmentation.setOptions({
+		this.selfieSegmentation.setOptions({
 			modelSelection: this.props.modelSelection === "performance" ? 1 : 0,
 			selfieMode: true,
 		});
-		selfieSegmentation.onResults((res) => {
+		this.selfieSegmentation.onResults((res) => {
 			const canvasElement = this.canvasRef.current!;
 			const context = canvasElement.getContext("2d")!;
 			context.save();
@@ -82,18 +83,19 @@ export class Webcam extends Component<Props> {
 
 		this.camera = new Camera(this.webcamRef.current!, {
 			onFrame: async () => {
-				await selfieSegmentation.send({ image: this.webcamRef.current! });
+				await this.selfieSegmentation?.send({ image: this.webcamRef.current! });
 			},
 			width: this.finalResolution.width,
 			height: this.finalResolution.height,
 			facingMode: "user",
 		});
 
-		this.camera?.start();
+		this.camera?.start().then(console.log).catch(console.log);
 	}
 
 	componentWillUnmount() {
-		this.camera?.stop();
+		this.camera?.stop().then(console.log).catch(console.log);
+		this.selfieSegmentation?.close().then(console.log).catch(console.log);
 	}
 
 	render() {
