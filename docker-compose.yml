@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  web:
+    image: bgremover
+    build: .
+    container_name: bgremover
+    restart: unless-stopped
+    expose:
+      - 3000
+    network_mode: bridge
+    environment:
+      - VIRTUAL_HOST=bgremover.adamvician.sk, www.bgremover.adamvician.sk
+      - LETSENCRYPT_HOST=bgremover.adamvician.sk, www.bgremover.adamvician.sk
+      - LETSENCRYPT_EMAIL=adamvician@gmail.com
