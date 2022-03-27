@@ -101,7 +101,7 @@ export class Webcam extends Component<Props> {
 
 	render() {
 		return (
-			<div>
+			<div style={{ width: "100%" }}>
 				<Video autoPlay ref={this.contentRef} />
 				<HiddenLayer>
 					<video

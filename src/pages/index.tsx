@@ -6,8 +6,7 @@ import { Webcam } from "../components/Webcam";
 import { BlurFilter, ColorFilter, IFilter } from "../helpers/filters";
 
 const Container = styled.div`
-	width: 100vw;
-	max-width: 100%;
+	min-width: 100vw;
 	min-height: 100vh;
 	padding: 16px;
 	display: flex;
