@@ -1,3 +1,5 @@
+import { getVideoStream } from "./getVideoStream";
+
 interface Props {
 	onFrame: () => Promise<void>;
 	width: number;
@@ -8,16 +10,7 @@ export class Camera {
 	constructor(private video: HTMLVideoElement, private props: Props) {}
 
 	start() {
-		navigator.mediaDevices
-			.getUserMedia({
-				audio: false,
-				video: {
-					aspectRatio: this.props.width / this.props.height,
-					width: this.props.width,
-					height: this.props.height,
-					facingMode: "user",
-				},
-			})
+		getVideoStream(this.props.width, this.props.height)
 			.then((stream) => {
 				this.video.srcObject = stream;
 			})

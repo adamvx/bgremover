@@ -4,7 +4,7 @@ import BlurOnIcon from "@mui/icons-material/BlurOn";
 import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
 import { Paper } from "@mui/material";
 import type { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FilterItem } from "../components/FilterItem";
 import { FiltersGroup } from "../components/FiltersGroup";
 import { Webcam } from "../components/Webcam";
@@ -14,6 +14,8 @@ import {
 	CustomBackgroundImageFilter,
 	IFilter,
 } from "../helpers/filters";
+import { getVideoStream } from "../helpers/getVideoStream";
+import { getResolution } from "../helpers/resolution";
 
 const Container = styled.div`
 	min-width: 100vw;
@@ -33,15 +35,26 @@ const VideoContainer = styled.div`
 const Home: NextPage = () => {
 	const [filter, setFilter] = useState<IFilter>();
 	const [image, setImage] = useState<File | null>(null);
+	const [permissionStatus, setPermissionStatus] = useState<boolean>();
+	const resolution = getResolution("hd");
 
 	const handleFileUpload = (files: FileList | null) => {
 		console.log(files?.[0]);
 		setImage(files?.[0] || null);
 	};
+
+	useEffect(() => {
+		getVideoStream(resolution.width, resolution.height)
+			.then(() => setPermissionStatus(true))
+			.catch(() => setPermissionStatus(false));
+	}, []);
+
 	return (
 		<Container>
 			<VideoContainer>
-				<Webcam filter={filter} />
+				{permissionStatus !== undefined && (
+					<Webcam filter={filter} resolution={resolution} />
+				)}
 			</VideoContainer>
 			<Paper elevation={1} style={{ width: 336 }}>
 				<FiltersGroup title="Filtre">

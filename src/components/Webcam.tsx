@@ -3,12 +3,11 @@ import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
 import React, { Component } from "react";
 import { Camera } from "../helpers/camera";
 import { IFilter } from "../helpers/filters";
-import { getResolution } from "../helpers/resolution";
-import { Resolution, TResolution } from "../types";
+import { TResolution } from "../types";
 
 interface Props {
 	modelSelection?: "quality" | "performance";
-	resolution?: Resolution;
+	resolution: TResolution;
 	filter?: IFilter;
 }
 
@@ -26,13 +25,11 @@ export class Webcam extends Component<Props> {
 	private webcamRef = React.createRef<HTMLVideoElement>();
 	private contentRef = React.createRef<HTMLVideoElement>();
 	private canvasRef = React.createRef<HTMLCanvasElement>();
-	private finalResolution: TResolution;
 	private camera?: Camera;
 	private selfieSegmentation?: SelfieSegmentation;
 
 	constructor(props: Props) {
 		super(props);
-		this.finalResolution = getResolution(props.resolution || "hd");
 	}
 
 	componentDidMount() {
@@ -85,8 +82,8 @@ export class Webcam extends Component<Props> {
 			onFrame: async () => {
 				await this.selfieSegmentation?.send({ image: this.webcamRef.current! });
 			},
-			width: this.finalResolution.width,
-			height: this.finalResolution.height,
+			width: this.props.resolution.width,
+			height: this.props.resolution.height,
 		});
 
 		this.camera?.start();
@@ -108,14 +105,14 @@ export class Webcam extends Component<Props> {
 						autoPlay
 						ref={this.webcamRef}
 						style={{
-							height: this.finalResolution.height,
-							width: this.finalResolution.width,
+							height: this.props.resolution.height,
+							width: this.props.resolution.width,
 						}}
 					/>
 					<canvas
 						ref={this.canvasRef}
-						width={this.finalResolution.width}
-						height={this.finalResolution.height}
+						width={this.props.resolution.width}
+						height={this.props.resolution.height}
 					/>
 				</HiddenLayer>
 			</div>
