@@ -90,12 +90,21 @@ export class Webcam extends Component<Props> {
 			facingMode: "user",
 		});
 
-		this.camera?.start().then(console.log).catch(console.log);
+		this.camera
+			?.start()
+			.then(() => console.log("Camera started"))
+			.catch((err) => console.log("Camera start error", err));
 	}
 
 	componentWillUnmount() {
-		this.camera?.stop().then(console.log).catch(console.log);
-		this.selfieSegmentation?.close().then(console.log).catch(console.log);
+		this.camera
+			?.stop()
+			.then(() => console.log("Camera stopped"))
+			.catch((err) => console.log("Camera stop error", err));
+		this.selfieSegmentation
+			?.close()
+			.then(() => console.log("Segmentation stoped"))
+			.catch((err) => console.log("Segmentation stop error", err));
 	}
 
 	render() {
@@ -104,6 +113,7 @@ export class Webcam extends Component<Props> {
 				<Video autoPlay ref={this.contentRef} />
 				<HiddenLayer>
 					<video
+						autoPlay
 						ref={this.webcamRef}
 						style={{
 							width: this.finalResolution.width,
