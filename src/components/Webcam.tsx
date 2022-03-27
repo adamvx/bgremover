@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import { Camera } from "@mediapipe/camera_utils";
 import { SelfieSegmentation } from "@mediapipe/selfie_segmentation";
 import React, { Component } from "react";
+import { Camera } from "../helpers/camera";
 import { IFilter } from "../helpers/filters";
 import { getResolution } from "../helpers/resolution";
 import { Resolution, TResolution } from "../types";
@@ -87,20 +87,12 @@ export class Webcam extends Component<Props> {
 			},
 			width: this.finalResolution.width,
 			height: this.finalResolution.height,
-			facingMode: "user",
 		});
 
-		this.camera
-			?.start()
-			.then(() => console.log("Camera started"))
-			.catch((err) => console.log("Camera start error", err));
+		this.camera?.start();
 	}
 
 	componentWillUnmount() {
-		this.camera
-			?.stop()
-			.then(() => console.log("Camera stopped"))
-			.catch((err) => console.log("Camera stop error", err));
 		this.selfieSegmentation
 			?.close()
 			.then(() => console.log("Segmentation stoped"))
@@ -109,15 +101,15 @@ export class Webcam extends Component<Props> {
 
 	render() {
 		return (
-			<>
+			<div>
 				<Video autoPlay ref={this.contentRef} />
 				<HiddenLayer>
 					<video
 						autoPlay
 						ref={this.webcamRef}
 						style={{
-							width: this.finalResolution.width,
 							height: this.finalResolution.height,
+							width: this.finalResolution.width,
 						}}
 					/>
 					<canvas
@@ -126,7 +118,7 @@ export class Webcam extends Component<Props> {
 						height={this.finalResolution.height}
 					/>
 				</HiddenLayer>
-			</>
+			</div>
 		);
 	}
 }
