@@ -13,10 +13,16 @@ export class Camera {
 				audio: false,
 				video: {
 					aspectRatio: this.props.width / this.props.height,
+					width: this.props.width,
+					height: this.props.height,
+					facingMode: "user",
 				},
 			})
 			.then((stream) => {
 				this.video.srcObject = stream;
+			})
+			.catch((err) => {
+				console.log("error loading user media", err);
 			});
 		this.video.onloadedmetadata = () => {
 			this.video.play();

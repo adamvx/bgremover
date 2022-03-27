@@ -15,8 +15,7 @@ import BlurOnIcon from "@mui/icons-material/BlurOn";
 import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
 
 const Container = styled.div`
-  width: 100vw;
-  max-width: 100%;
+  min-width: 100vw;
   min-height: 100vh;
   padding: 16px;
   display: flex;
