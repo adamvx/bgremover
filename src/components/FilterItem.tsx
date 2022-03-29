@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button, Paper, Tooltip } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import React from "react";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 	onClick?: () => void;
 }
 
-const StyledPaper = styled(Button)`
+const StyledIcon = styled(Button)`
 	display: flex;
 	width: 64px;
 	height: 64px;
@@ -29,9 +29,9 @@ export const FilterItem: React.FC<Props> = ({
 }) => {
 	return (
 		<Tooltip disableInteractive title={tooltip}>
-			<StyledPaper onClick={onClick} style={{ backgroundColor }}>
+			<StyledIcon onClick={onClick} style={{ backgroundColor }}>
 				{icon && icon}
-			</StyledPaper>
+			</StyledIcon>
 		</Tooltip>
 	);
 };
