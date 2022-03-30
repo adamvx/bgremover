@@ -35,8 +35,6 @@ export class BlurFilter implements IFilter {
 	): void {
 		context.globalCompositeOperation = "destination-atop";
 		context.filter = `blur(${this.blur}px)`;
-		console.log("1");
-
 		context.drawImage(webcam, 0, 0, width, height);
 	}
 }
