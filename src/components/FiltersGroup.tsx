@@ -19,12 +19,10 @@ const Filters = styled.div`
 	gap: 16px;
 `;
 
-const Title = styled.span``;
-
 export const FiltersGroup: React.FC<Props> = ({ title, children }) => {
 	return (
 		<Group>
-			<Title>{title}</Title>
+			<span>{title}</span>
 			<Filters>{children}</Filters>
 		</Group>
 	);
